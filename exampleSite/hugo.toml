@@ -1,0 +1,67 @@
+baseURL = "https://example.com/"
+locale = "en-US"
+title = "LyteCade"
+theme = "lytestoa"
+
+[params]
+  subtitle = "Open Source HTML5 Games"
+  description = "LyteCade is a showcase of open source HTML5 games. Play free, browser-based games built with open source code."
+  tagline = "LyteCade showcases open source HTML5 games you can play free, right in your browser. Every game is built with open source code, available for anyone to play, study, and improve."
+  logo = "logo.webp"
+  og_image = "https://placehold.co/600x400"
+  github_url = "https://github.com/lytecade"
+  footer_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+
+[taxonomies]
+  genre = "genres"
+  tag = "tags"
+
+[menus]
+  [[menus.main]]
+    name = "Home"
+    url = "/"
+    weight = 10
+  [[menus.main]]
+    name = "Games"
+    url = "/#games"
+    weight = 20
+  [[menus.main]]
+    name = "About"
+    url = "/#about"
+    weight = 30
+  [[menus.main]]
+    name = "Github"
+    url = "https://github.com/lytecade"
+    weight = 40
+
+[module]
+  [[module.mounts]]
+    source = "content"
+    target = "content"
+  [[module.mounts]]
+    source = "content/games"
+    target = "content/play"
+  [[module.mounts]]
+    source = "static"
+    target = "static"
+
+[[cascade]]
+  [cascade.build]
+    list = "never"
+    render = "never"
+  [cascade.target]
+    path = "/play"
+    kind = "section"
+
+[[cascade]]
+  [cascade.build]
+    list = "never"
+    render = "never"
+  [cascade.target]
+    path = "/play/game-*"
+
+[[cascade]]
+  [cascade.build]
+    list = "never"
+  [cascade.target]
+    path = "/play/**"

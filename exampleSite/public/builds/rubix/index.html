@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rubix — Playable HTML5 Canvas Build</title>
+  <style>
+    :root {
+      --bg: #0e1923;
+      --fg: #d6e8ee;
+      --accent: #5accf0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .hud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .hud span {
+      border: 1px solid var(--accent);
+      padding: 4px 10px;
+    }
+    canvas {
+      border: 4px solid var(--accent);
+      background: #081017;
+      max-width: 92vw;
+      max-height: 62vh;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      justify-content: center;
+    }
+    button {
+      font: inherit;
+      font-weight: bold;
+      color: var(--accent);
+      background: transparent;
+      border: 2px solid var(--accent);
+      padding: 4px 12px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: rgba(90, 204, 240, 0.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <span>RUBIX // CYBER-CUBE</span>
+    <span id="moves">MOVES: 0</span>
+    <span id="timer">TIME: 00:00.0</span>
+    <span id="status">STATUS: SCRAMBLED</span>
+  </div>
+
+  <canvas id="cubeCanvas" width="480" height="300"></canvas>
+
+  <div class="controls">
+    <button type="button" data-slice="0">L</button>
+    <button type="button" data-slice="1">M-V</button>
+    <button type="button" data-slice="2">R</button>
+    <button type="button" data-row="0">U</button>
+    <button type="button" data-row="1">M-H</button>
+    <button type="button" data-row="2">D</button>
+    <button type="button" id="shuffleBtn">SHUFFLE</button>
+    <button type="button" id="resetBtn">SOLVE / RESET</button>
+  </div>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById('cubeCanvas');
+      const ctx = canvas.getContext('2d');
+      const movesEl = document.getElementById('moves');
+      const timerEl = document.getElementById('timer');
+      const statusEl = document.getElementById('status');
+
+      const palette = ['#5accf0', '#ff4d88', '#33ff99', '#ffcc00', '#a66bff', '#ffffff'];
+      let grid = Array.from({ length: 3 }, () => [0, 0, 0]);
+      let moves = 0;
+      let startTime = null;
+      let solved = false;
+
+      function scramble() {
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < 3; c++) {
+            grid[r][c] = Math.floor(Math.random() * palette.length);
+          }
+        }
+        moves = 0;
+        startTime = null;
+        solved = false;
+        updateHud();
+        draw();
+      }
+
+      function resetCube() {
+        grid = Array.from({ length: 3 }, () => [0, 0, 0]);
+        moves = 0;
+        startTime = null;
+        solved = true;
+        updateHud();
+        draw();
+      }
+
+      function checkSolved() {
+        const first = grid[0][0];
+        return grid.every(row => row.every(cell => cell === first));
+      }
+
+      function stepMove() {
+        if (!startTime) startTime = performance.now();
+        moves++;
+        solved = checkSolved();
+        updateHud();
+        draw();
+      }
+
+      function rotateCol(c) {
+        for (let r = 0; r < 3; r++) {
+          grid[r][c] = (grid[r][c] + 1) % palette.length;
+        }
+        stepMove();
+      }
+
+      function rotateRow(r) {
+        for (let c = 0; c < 3; c++) {
+          grid[r][c] = (grid[r][c] + 1) % palette.length;
+        }
+        stepMove();
+      }
+
+      function updateHud() {
+        movesEl.textContent = `MOVES: ${moves}`;
+        statusEl.textContent = solved ? 'STATUS: SOLVED!' : 'STATUS: ACTIVE';
+      }
+
+      function draw() {
+        ctx.fillStyle = '#081017';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const size = 68;
+        const gap = 10;
+        const total = 3 * size + 2 * gap;
+        const startX = (canvas.width - total) / 2;
+        const startY = (canvas.height - total) / 2;
+
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < 3; c++) {
+            const x = startX + c * (size + gap);
+            const y = startY + r * (size + gap);
+            ctx.fillStyle = palette[grid[r][c]];
+            ctx.fillRect(x, y, size, size);
+            ctx.strokeStyle = '#0e1923';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x, y, size, size);
+          }
+        }
+      }
+
+      document.querySelectorAll('[data-slice]').forEach(btn => {
+        btn.addEventListener('click', () => rotateCol(Number(btn.dataset.slice)));
+      });
+      document.querySelectorAll('[data-row]').forEach(btn => {
+        btn.addEventListener('click', () => rotateRow(Number(btn.dataset.row)));
+      });
+      document.getElementById('shuffleBtn').addEventListener('click', scramble);
+      document.getElementById('resetBtn').addEventListener('click', resetCube);
+
+      setInterval(() => {
+        if (startTime && !solved) {
+          const elapsed = ((performance.now() - startTime) / 1000).toFixed(1);
+          timerEl.textContent = `TIME: ${elapsed}s`;
+        }
+      }, 100);
+
+      scramble();
+    })();
+  </script>
+</body>
+</html>

@@ -1,8 +1,13 @@
-{{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
-{{- $playURL := (printf "/play/%s/" $slug) | relURL -}}
+{{- $slug := .Slug -}}
+{{- if not $slug -}}
+  {{- with .File -}}
+    {{- $slug = .ContentBaseName -}}
+  {{- end -}}
+{{- end -}}
+{{- $playURL := (printf "play/%s/" $slug) | relURL -}}
 {{- $img := .Params.cover.image | default "https://placehold.co/600x400" -}}
 {{- if not (hasPrefix $img "http") -}}
-  {{- $img = $img | relURL -}}
+  {{- $img = (strings.TrimPrefix "/" $img) | relURL -}}
 {{- end -}}
 {{- $alt := .Params.cover.alt | default (printf "%s screenshot" .Title) -}}
 {{- $summary := .Params.summary | default .Summary | plainify | htmlUnescape -}}

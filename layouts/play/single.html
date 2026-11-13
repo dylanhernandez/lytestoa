@@ -1,14 +1,19 @@
 {{- define "main_class" -}}play-page{{- end -}}
 
 {{- define "main" -}}
-  {{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
-  {{- $gameURL := (printf "/games/%s/" $slug) | relURL -}}
-  {{- $buildURL := (printf "/builds/%s/index.html" $slug) | relURL -}}
+  {{- $slug := .Slug -}}
+  {{- if not $slug -}}
+    {{- with .File -}}
+      {{- $slug = .ContentBaseName -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $gameURL := (printf "games/%s/" $slug) | relURL -}}
+  {{- $buildURL := (printf "builds/%s/index.html" $slug) | relURL -}}
   {{- with .Params.build_url -}}
     {{- if or (hasPrefix . "http://") (hasPrefix . "https://") -}}
       {{- $buildURL = . -}}
     {{- else -}}
-      {{- $buildURL = . | relURL -}}
+      {{- $buildURL = (strings.TrimPrefix "/" .) | relURL -}}
     {{- end -}}
   {{- end -}}
   {{- $aspectRatio := .Params.aspect_ratio | default "16/9" -}}
@@ -25,7 +30,7 @@
     </div>
 
     {{- if .Params.playable }}
-      <div class="stage-viewport" style="--stage-aspect: {{ $aspectRatio }};">
+      <div class="stage-viewport" {{ printf "style=\"--stage-aspect: %s;\"" $aspectRatio | safeHTMLAttr }}>
         <iframe
           class="stage-frame"
           src="{{ $buildURL }}"

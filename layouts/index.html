@@ -1,6 +1,6 @@
 {{- define "main" -}}
   <section id="home" class="home-section" aria-labelledby="home-title">
-    <h1 class="section-title" id="home-title"><a href="{{ "/" | relURL }}">{{ .Params.hero_title | default site.Params.subtitle | default site.Title }}</a></h1>
+    <h1 class="section-title" id="home-title"><a href="{{ "" | relURL }}">{{ .Params.hero_title | default site.Params.subtitle | default site.Title }}</a></h1>
     {{- with (.Params.tagline | default site.Params.tagline | default site.Params.description) }}
       <p class="site-tagline">{{ . }}</p>
     {{- end }}

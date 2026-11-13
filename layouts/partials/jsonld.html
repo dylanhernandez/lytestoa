@@ -10,10 +10,15 @@
   {{ $schema | jsonify (dict "indent" "  ") | safeJS }}
   </script>
 {{- else if and .IsPage (eq .Section "games") -}}
-  {{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
+  {{- $slug := .Slug -}}
+  {{- if not $slug -}}
+    {{- with .File -}}
+      {{- $slug = .ContentBaseName -}}
+    {{- end -}}
+  {{- end -}}
   {{- $img := .Params.cover.image | default site.Params.og_image | default "https://placehold.co/600x400" -}}
   {{- if not (hasPrefix $img "http") -}}
-    {{- $img = $img | absURL -}}
+    {{- $img = (strings.TrimPrefix "/" $img) | absURL -}}
   {{- end -}}
   {{- $genre := "Game" -}}
   {{- with .Params.genres -}}
@@ -41,7 +46,7 @@
     {{- $schema = merge $schema (dict "license" .) -}}
   {{- end -}}
   {{- if .Params.playable -}}
-    {{- $playURL := (printf "/play/%s/" $slug) | absURL -}}
+    {{- $playURL := (printf "play/%s/" $slug) | absURL -}}
     {{- $schema = merge $schema (dict "potentialAction" (dict "@type" "PlayAction" "target" $playURL)) -}}
   {{- end -}}
   <script type="application/ld+json">

@@ -1,11 +1,16 @@
 {{- define "main_class" -}}game-page{{- end -}}
 
 {{- define "main" -}}
-  {{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
-  {{- $playURL := (printf "/play/%s/" $slug) | relURL -}}
+  {{- $slug := .Slug -}}
+  {{- if not $slug -}}
+    {{- with .File -}}
+      {{- $slug = .ContentBaseName -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $playURL := (printf "play/%s/" $slug) | relURL -}}
   {{- $img := .Params.cover.image | default "https://placehold.co/600x400" -}}
   {{- if not (hasPrefix $img "http") -}}
-    {{- $img = $img | relURL -}}
+    {{- $img = (strings.TrimPrefix "/" $img) | relURL -}}
   {{- end -}}
   {{- $alt := .Params.cover.alt | default (printf "%s screenshot" .Title) -}}
   {{- $caption := .Params.cover.caption | default .Title -}}
@@ -89,7 +94,7 @@
           {{- range . }}
             {{- $sImg := .image | default . -}}
             {{- if not (hasPrefix $sImg "http") -}}
-              {{- $sImg = $sImg | relURL -}}
+              {{- $sImg = (strings.TrimPrefix "/" $sImg) | relURL -}}
             {{- end }}
             <figure>
               <img src="{{ $sImg }}" alt="{{ $.Title }} screenshot" loading="lazy">
@@ -102,6 +107,6 @@
       </section>
     {{- end }}
 
-    <p class="back-home"><a href="{{ "/" | relURL }}">&larr; Back to all games</a></p>
+    <p class="back-home"><a href="{{ "" | relURL }}">&larr; Back to all games</a></p>
   </article>
 {{- end -}}
