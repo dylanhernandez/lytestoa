@@ -1,0 +1,50 @@
+{{- if .IsHome -}}
+  {{- $schema := dict
+    "@context" "https://schema.org"
+    "@type" "WebSite"
+    "name" site.Title
+    "url" site.BaseURL
+    "description" (site.Params.description | default "")
+  -}}
+  <script type="application/ld+json">
+  {{ $schema | jsonify (dict "indent" "  ") | safeJS }}
+  </script>
+{{- else if and .IsPage (eq .Section "games") -}}
+  {{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
+  {{- $img := .Params.cover.image | default site.Params.og_image | default "https://placehold.co/600x400" -}}
+  {{- if not (hasPrefix $img "http") -}}
+    {{- $img = $img | absURL -}}
+  {{- end -}}
+  {{- $genre := "Game" -}}
+  {{- with .Params.genres -}}
+    {{- $genre = index . 0 -}}
+  {{- end -}}
+  {{- $desc := .Description | default .Summary | plainify | htmlUnescape | chomp -}}
+  {{- $schema := dict
+    "@context" "https://schema.org"
+    "@type" "VideoGame"
+    "name" .Title
+    "url" .Permalink
+    "image" $img
+    "genre" $genre
+    "description" $desc
+    "applicationCategory" (.Params.application_category | default "Game")
+    "operatingSystem" (.Params.operating_system | default "Web")
+  -}}
+  {{- with .Params.developer -}}
+    {{- $schema = merge $schema (dict "author" (dict "@type" "Organization" "name" .)) -}}
+  {{- end -}}
+  {{- with .Params.repo_url -}}
+    {{- $schema = merge $schema (dict "codeRepository" .) -}}
+  {{- end -}}
+  {{- with .Params.license -}}
+    {{- $schema = merge $schema (dict "license" .) -}}
+  {{- end -}}
+  {{- if .Params.playable -}}
+    {{- $playURL := (printf "/play/%s/" $slug) | absURL -}}
+    {{- $schema = merge $schema (dict "potentialAction" (dict "@type" "PlayAction" "target" $playURL)) -}}
+  {{- end -}}
+  <script type="application/ld+json">
+  {{ $schema | jsonify (dict "indent" "  ") | safeJS }}
+  </script>
+{{- end -}}

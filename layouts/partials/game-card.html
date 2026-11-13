@@ -1,0 +1,24 @@
+{{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
+{{- $playURL := (printf "/play/%s/" $slug) | relURL -}}
+{{- $img := .Params.cover.image | default "https://placehold.co/600x400" -}}
+{{- if not (hasPrefix $img "http") -}}
+  {{- $img = $img | relURL -}}
+{{- end -}}
+{{- $alt := .Params.cover.alt | default (printf "%s screenshot" .Title) -}}
+{{- $summary := .Params.summary | default .Summary | plainify | htmlUnescape -}}
+
+<article class="game-card">
+  <a href="{{ .RelPermalink }}" aria-label="View {{ .Title }}">
+    <img src="{{ $img }}" alt="{{ $alt }}" width="600" height="400" loading="lazy">
+  </a>
+  <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+  <p>{{ $summary }}</p>
+  <div class="card-actions">
+    {{- if .Params.playable }}
+      <a class="btn" href="{{ $playURL }}">Play</a>
+    {{- else }}
+      <span class="btn is-disabled" aria-disabled="true">Play</span>
+    {{- end }}
+    <a class="read-more" href="{{ .RelPermalink }}">Read More</a>
+  </div>
+</article>

@@ -1,0 +1,69 @@
+{{- $title := site.Title -}}
+{{- if .IsHome -}}
+  {{- with site.Params.subtitle -}}
+    {{- $title = printf "%s — %s" site.Title . -}}
+  {{- end -}}
+{{- else -}}
+  {{- $title = printf "%s — %s" .Title site.Title -}}
+{{- end -}}
+
+{{- $description := .Description | default .Summary | default site.Params.description | plainify | htmlUnescape | chomp -}}
+{{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
+{{- $canonical := .Permalink -}}
+{{- if and (eq .Section "play") $slug -}}
+  {{- $canonical = (printf "/games/%s/" $slug) | absURL -}}
+{{- end -}}
+
+{{- $ogImage := site.Params.og_image | default "https://placehold.co/600x400" -}}
+{{- with .Params.cover.image -}}
+  {{- $ogImage = . -}}
+{{- end -}}
+{{- if not (hasPrefix $ogImage "http") -}}
+  {{- $ogImage = $ogImage | absURL -}}
+{{- end -}}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ $title }}</title>
+{{- with $description }}
+<meta name="description" content="{{ . }}">
+{{- end }}
+{{- if eq .Section "play" }}
+<meta name="robots" content="noindex, follow">
+{{- else }}
+<meta name="robots" content="index, follow">
+{{- end }}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ $title }}">
+{{- with $description }}
+<meta property="og:description" content="{{ . }}">
+{{- end }}
+<meta property="og:url" content="{{ $canonical }}">
+<meta property="og:image" content="{{ $ogImage }}">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $title }}">
+{{- with $description }}
+<meta name="twitter:description" content="{{ . }}">
+{{- end }}
+<meta name="twitter:image" content="{{ $ogImage }}">
+
+<link rel="canonical" href="{{ $canonical }}">
+
+<!-- Favicons -->
+<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32x32.png" | relURL }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ "favicon-16x16.png" | relURL }}">
+<link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ "apple-touch-icon.png" | relURL }}">
+
+{{- with resources.Get "css/main.css" -}}
+  {{- $css := . | minify | fingerprint -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" crossorigin="anonymous">
+{{- end }}
+
+{{- partial "jsonld.html" . -}}

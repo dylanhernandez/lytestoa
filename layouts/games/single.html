@@ -1,0 +1,107 @@
+{{- define "main_class" -}}game-page{{- end -}}
+
+{{- define "main" -}}
+  {{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
+  {{- $playURL := (printf "/play/%s/" $slug) | relURL -}}
+  {{- $img := .Params.cover.image | default "https://placehold.co/600x400" -}}
+  {{- if not (hasPrefix $img "http") -}}
+    {{- $img = $img | relURL -}}
+  {{- end -}}
+  {{- $alt := .Params.cover.alt | default (printf "%s screenshot" .Title) -}}
+  {{- $caption := .Params.cover.caption | default .Title -}}
+
+  <article class="game-detail">
+    <h1 class="section-title">{{ .Title }}</h1>
+
+    <figure>
+      <img src="{{ $img }}" alt="{{ $alt }}" width="600" height="400">
+      <figcaption>{{ $caption }}</figcaption>
+    </figure>
+
+    <div class="game-actions">
+      {{- if .Params.playable }}
+        <a class="btn" href="{{ $playURL }}">Play</a>
+      {{- else }}
+        <span class="btn is-disabled" aria-disabled="true">Play</span>
+      {{- end }}
+      {{- with .Params.repo_url }}
+        <a class="btn" href="{{ . }}" rel="noopener noreferrer">Source Code</a>
+      {{- end }}
+    </div>
+
+    {{- if or .Params.genres .Params.developer .Params.engine .Params.license .Params.tags }}
+      <ul class="game-meta" aria-label="Game metadata">
+        {{- with .GetTerms "genres" }}
+          <li>
+            <span class="game-meta-label">Genre:</span>
+            <ul class="tag-list">
+              {{- range . }}
+                <li><a class="tag-badge" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+              {{- end }}
+            </ul>
+          </li>
+        {{- else -}}
+          {{- with .Params.genres }}
+            <li><span class="game-meta-label">Genre:</span> {{ delimit . ", " }}</li>
+          {{- end }}
+        {{- end }}
+        {{- with .Params.developer }}
+          <li><span class="game-meta-label">Developer:</span> {{ . }}</li>
+        {{- end }}
+        {{- with .Params.engine }}
+          <li><span class="game-meta-label">Engine:</span> {{ . }}</li>
+        {{- end }}
+        {{- with .Params.license }}
+          <li><span class="game-meta-label">License:</span> {{ . }}</li>
+        {{- end }}
+        {{- with .GetTerms "tags" }}
+          <li>
+            <span class="game-meta-label">Tags:</span>
+            <ul class="tag-list">
+              {{- range . }}
+                <li><a class="tag-badge" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>
+              {{- end }}
+            </ul>
+          </li>
+        {{- end }}
+      </ul>
+    {{- end }}
+
+    <div class="game-content">
+      {{ .Content }}
+    </div>
+
+    {{- with .Params.controls }}
+      <section aria-labelledby="{{ $slug }}-howto">
+        <h2 id="{{ $slug }}-howto">How to play</h2>
+        <ul>
+          {{- range . }}
+            <li>{{ . | markdownify }}</li>
+          {{- end }}
+        </ul>
+      </section>
+    {{- end }}
+
+    {{- with .Params.screenshots }}
+      <section aria-labelledby="{{ $slug }}-screenshots">
+        <h2 id="{{ $slug }}-screenshots">Screenshots</h2>
+        <div class="gallery">
+          {{- range . }}
+            {{- $sImg := .image | default . -}}
+            {{- if not (hasPrefix $sImg "http") -}}
+              {{- $sImg = $sImg | relURL -}}
+            {{- end }}
+            <figure>
+              <img src="{{ $sImg }}" alt="{{ $.Title }} screenshot" loading="lazy">
+              {{- with .caption }}
+                <figcaption>{{ . }}</figcaption>
+              {{- end }}
+            </figure>
+          {{- end }}
+        </div>
+      </section>
+    {{- end }}
+
+    <p class="back-home"><a href="{{ "/" | relURL }}">&larr; Back to all games</a></p>
+  </article>
+{{- end -}}

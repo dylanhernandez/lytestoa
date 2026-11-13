@@ -1,0 +1,26 @@
+{{- define "main" -}}
+  <section id="home" class="home-section" aria-labelledby="home-title">
+    <h1 class="section-title" id="home-title"><a href="{{ "/" | relURL }}">{{ .Params.hero_title | default site.Params.subtitle | default site.Title }}</a></h1>
+    {{- with (.Params.tagline | default site.Params.tagline | default site.Params.description) }}
+      <p class="site-tagline">{{ . }}</p>
+    {{- end }}
+  </section>
+
+  <section id="games" aria-labelledby="games-title">
+    <h2 class="section-title" id="games-title">{{ .Params.games_title | default "Games" }}</h2>
+
+    {{- $games := where site.RegularPages "Section" "games" -}}
+    <div class="gallery">
+      {{- range $games }}
+        {{- partial "game-card.html" . -}}
+      {{- end }}
+    </div>
+  </section>
+
+  {{- with .Content }}
+    <section id="about" aria-labelledby="about-title">
+      <h2 class="section-title" id="about-title">{{ $.Params.about_title | default "About" }}</h2>
+      {{ . }}
+    </section>
+  {{- end }}
+{{- end -}}

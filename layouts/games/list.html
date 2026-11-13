@@ -1,0 +1,18 @@
+{{- define "main" -}}
+  <section id="games" aria-labelledby="games-title">
+    <h1 class="section-title" id="games-title">{{ .Title | default "Games" }}</h1>
+    {{- with .Content }}
+      <div class="list-intro">
+        {{ . }}
+      </div>
+    {{- end }}
+
+    <div class="gallery">
+      {{- range .Pages }}
+        {{- partial "game-card.html" . -}}
+      {{- end }}
+    </div>
+
+    <p class="back-home"><a href="{{ "/" | relURL }}">&larr; Back to home</a></p>
+  </section>
+{{- end -}}

@@ -1,0 +1,28 @@
+{{- define "main" -}}
+  <section aria-labelledby="taxonomy-title">
+    <h1 class="section-title" id="taxonomy-title">{{ .Title }}</h1>
+    {{- with .Content }}
+      <div class="taxonomy-intro">
+        {{ . }}
+      </div>
+    {{- end }}
+
+    {{- if eq .Kind "taxonomy" }}
+      <ul class="tag-list">
+        {{- range .Data.Terms.Alphabetical }}
+          <li>
+            <a class="tag-badge" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
+          </li>
+        {{- end }}
+      </ul>
+    {{- else }}
+      <div class="gallery">
+        {{- range .Pages }}
+          {{- partial "game-card.html" . -}}
+        {{- end }}
+      </div>
+    {{- end }}
+
+    <p class="back-home"><a href="{{ "/" | relURL }}">&larr; Back to all games</a></p>
+  </section>
+{{- end -}}
