@@ -1,0 +1,31 @@
+# LyteStoa Theme Default Configuration
+
+[taxonomies]
+  genre = "genres"
+  tag = "tags"
+
+[module]
+  [[module.mounts]]
+    source = "content"
+    target = "content"
+  [[module.mounts]]
+    source = "content/games"
+    target = "content/play"
+  [[module.mounts]]
+    source = "static"
+    target = "static"
+  [[module.mounts]]
+    source = "layouts"
+    target = "layouts"
+  [[module.mounts]]
+    source = "assets"
+    target = "assets"
+  [[module.mounts]]
+    source = "archetypes"
+    target = "archetypes"
+
+[[cascade]]
+  [cascade.build]
+    list = "never"
+  [cascade.target]
+    path = "/play/**"

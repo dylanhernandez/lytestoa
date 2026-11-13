@@ -1,0 +1,28 @@
+name = "LyteStoa"
+license = "MIT"
+licenselink = "https://github.com/kyrolyte/lytestoa/blob/main/LICENSE"
+description = "A fast, responsive Hugo theme purpose-built for curating, showcasing, and embedding playable HTML5 game galleries."
+homepage = "https://github.com/kyrolyte/lytestoa"
+min_version = "0.128.0"
+
+tags = [
+  "games",
+  "html5",
+  "gallery",
+  "showcase",
+  "arcade",
+  "minimal",
+  "dark",
+  "responsive"
+]
+
+features = [
+  "responsive-gallery",
+  "playable-stage",
+  "json-ld-seo",
+  "zero-dependencies"
+]
+
+[author]
+  name = "KyroLyte"
+  homepage = "https://github.com/kyrolyte"
