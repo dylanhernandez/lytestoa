@@ -1,10 +1,10 @@
 ---
-title: "LyteCade"
-hero_title: "Open Source HTML5 Games"
-tagline: "LyteCade showcases open source HTML5 games you can play free, right in your browser. Every game is built with open source code, available for anyone to play, study, and improve."
+title: "Stoa"
+hero_title: "Lorum Ipsum Games"
+tagline: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 games_title: "Games"
 about_title: "About"
-description: "LyteCade is a showcase of open source HTML5 games. Play free, browser-based games built with open source code."
+description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

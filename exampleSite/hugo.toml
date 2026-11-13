@@ -1,15 +1,15 @@
 baseURL = "https://example.com/"
 locale = "en-US"
-title = "LyteCade"
+title = "Lorum Ipsum"
 theme = "lytestoa"
 
 [params]
-  subtitle = "Open Source HTML5 Games"
-  description = "LyteCade is a showcase of open source HTML5 games. Play free, browser-based games built with open source code."
-  tagline = "LyteCade showcases open source HTML5 games you can play free, right in your browser. Every game is built with open source code, available for anyone to play, study, and improve."
+  subtitle = "Lorum Ipsum Games"
+  description = "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  tagline = "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
   logo = "logo.webp"
   og_image = "https://placehold.co/600x400"
-  github_url = "https://github.com/lytecade"
+  github_url = "https://github.com/"
   footer_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
 [taxonomies]
@@ -31,7 +31,7 @@ theme = "lytestoa"
     weight = 30
   [[menus.main]]
     name = "Github"
-    url = "https://github.com/lytecade"
+    url = "https://github.com/"
     weight = 40
 
 [module]
