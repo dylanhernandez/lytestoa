@@ -1,0 +1,54 @@
+{{- define "main_class" -}}play-page{{- end -}}
+
+{{- define "main" -}}
+  {{- $slug := .Slug | default (with .File }}{{ .ContentBaseName }}{{ end) -}}
+  {{- $gameURL := (printf "/games/%s/" $slug) | relURL -}}
+  {{- $buildURL := (printf "/builds/%s/index.html" $slug) | relURL -}}
+  {{- with .Params.build_url -}}
+    {{- if or (hasPrefix . "http://") (hasPrefix . "https://") -}}
+      {{- $buildURL = . -}}
+    {{- else -}}
+      {{- $buildURL = . | relURL -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $aspectRatio := .Params.aspect_ratio | default "16/9" -}}
+
+  <section class="play-stage" aria-label="{{ .Title }} playable stage">
+    <div class="stage-toolbar">
+      <a class="stage-back" href="{{ $gameURL }}">&larr; Back to {{ .Title }}</a>
+      <h1>{{ .Title }}</h1>
+      <div class="stage-toolbar-actions">
+        {{- if .Params.playable }}
+          <button type="button" class="btn stage-fullscreen-btn" data-fullscreen-toggle aria-pressed="false">Fullscreen</button>
+        {{- end }}
+      </div>
+    </div>
+
+    {{- if .Params.playable }}
+      <div class="stage-viewport" style="--stage-aspect: {{ $aspectRatio }};">
+        <iframe
+          class="stage-frame"
+          src="{{ $buildURL }}"
+          title="Play {{ .Title }}"
+          allow="fullscreen; gamepad; autoplay"
+          allowfullscreen
+          loading="eager">
+        </iframe>
+      </div>
+    {{- else }}
+      <div class="stage-unavailable">
+        <p>This game build is not currently available for browser play.</p>
+        <p class="back-home"><a href="{{ $gameURL }}">&larr; Return to {{ .Title }} details</a></p>
+      </div>
+    {{- end }}
+  </section>
+{{- end -}}
+
+{{- define "scripts" -}}
+  {{- if .Params.playable -}}
+    {{- with resources.Get "js/stage.js" -}}
+      {{- $js := . | minify | fingerprint -}}
+      <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer></script>
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

@@ -27,5 +27,13 @@
 [[cascade]]
   [cascade.build]
     list = "never"
+    render = "never"
+  [cascade.target]
+    path = "/play"
+    kind = "section"
+
+[[cascade]]
+  [cascade.build]
+    list = "never"
   [cascade.target]
     path = "/play/**"
