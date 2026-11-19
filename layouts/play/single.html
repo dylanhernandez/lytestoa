@@ -9,7 +9,7 @@
   {{- end -}}
   {{- $gameURL := (printf "games/%s/" $slug) | relURL -}}
   {{- $buildURL := (printf "builds/%s/index.html" $slug) | relURL -}}
-  {{- with .Params.build_url -}}
+  {{- with (.Params.build_url | default .Params.game_url) -}}
     {{- if or (hasPrefix . "http://") (hasPrefix . "https://") -}}
       {{- $buildURL = . -}}
     {{- else -}}
@@ -30,21 +30,92 @@
     </div>
 
     {{- if .Params.playable }}
-      <div class="stage-viewport" {{ printf "style=\"--stage-aspect: %s;\"" $aspectRatio | safeHTMLAttr }}>
-        <iframe
-          class="stage-frame"
-          src="{{ $buildURL }}"
-          title="Play {{ .Title }}"
-          allow="fullscreen; gamepad; autoplay"
-          allowfullscreen
-          loading="eager">
-        </iframe>
+      <div class="stage-viewport-wrap">
+        <div class="stage-viewport" {{ printf "style=\"--stage-aspect: %s;\"" $aspectRatio | safeHTMLAttr }}>
+          <iframe
+            class="stage-frame"
+            src="{{ $buildURL }}"
+            title="Play {{ .Title }}"
+            allow="fullscreen; gamepad; autoplay"
+            allowfullscreen
+            loading="eager">
+          </iframe>
+        </div>
       </div>
     {{- else }}
       <div class="stage-unavailable">
         <p>This game build is not currently available for browser play.</p>
         <p class="back-home"><a href="{{ $gameURL }}">&larr; Return to {{ .Title }} details</a></p>
       </div>
+    {{- end }}
+
+    {{- if or .Params.controls .Params.genres .Params.tags .Params.developer .Params.engine .Params.license }}
+      <div class="game-panel-grid">
+        {{- with .Params.controls }}
+          <section class="game-panel" aria-labelledby="{{ $slug }}-play-controls">
+            <h2 id="{{ $slug }}-play-controls">Controls &amp; How to Play</h2>
+            <ul>
+              {{- range . }}
+                <li>{{ . | markdownify }}</li>
+              {{- end }}
+            </ul>
+          </section>
+        {{- end }}
+
+        <section class="game-panel" aria-labelledby="{{ $slug }}-play-info">
+          <h2 id="{{ $slug }}-play-info">Game Info</h2>
+          <ul class="game-meta" style="margin: 0; padding: 0; border: 0; background: transparent;">
+            {{- with .GetTerms "genres" }}
+              <li>
+                <span class="game-meta-label">Genre:</span>
+                <ul class="tag-list">
+                  {{- range . }}
+                    <li><a class="tag-badge" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+                  {{- end }}
+                </ul>
+              </li>
+            {{- else -}}
+              {{- with .Params.genres }}
+                <li><span class="game-meta-label">Genre:</span> {{ delimit . ", " }}</li>
+              {{- end }}
+            {{- end }}
+            {{- with .Params.developer }}
+              <li><span class="game-meta-label">Developer:</span> {{ . }}</li>
+            {{- end }}
+            {{- with .Params.engine }}
+              <li><span class="game-meta-label">Engine:</span> {{ . }}</li>
+            {{- end }}
+            {{- with .Params.license }}
+              <li><span class="game-meta-label">License:</span> {{ . }}</li>
+            {{- end }}
+            {{- if not .Date.IsZero }}
+              <li><span class="game-meta-label">Released:</span> {{ .Date.Format "2006-01-02" }}</li>
+            {{- end }}
+            {{- with .GetTerms "tags" }}
+              <li>
+                <span class="game-meta-label">Tags:</span>
+                <ul class="tag-list">
+                  {{- range . }}
+                    <li><a class="tag-badge" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>
+                  {{- end }}
+                </ul>
+              </li>
+            {{- end }}
+          </ul>
+        </section>
+      </div>
+    {{- end }}
+
+    {{- $related := where (where site.RegularPages "Section" "games") "File.ContentBaseName" "ne" $slug | first 3 -}}
+    {{- if gt (len $related) 0 }}
+      <section aria-labelledby="{{ $slug }}-play-related">
+        <h2 class="section-title" id="{{ $slug }}-play-related">Related Games</h2>
+        <div class="gallery">
+          {{- range $related }}
+            {{- partial "game-card.html" . -}}
+          {{- end }}
+        </div>
+      </section>
     {{- end }}
   </section>
 {{- end -}}

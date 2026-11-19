@@ -4,6 +4,9 @@
     {{- with (.Params.tagline | default site.Params.tagline | default site.Params.description) }}
       <p class="site-tagline">{{ . }}</p>
     {{- end }}
+    <div class="hero-actions">
+      <a class="btn btn-cta" href="{{ .Params.hero_cta_url | default "#games" }}">Play Now</a>
+    </div>
   </section>
 
   <section id="games" aria-labelledby="games-title">

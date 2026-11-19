@@ -11,18 +11,36 @@
 {{- end -}}
 {{- $alt := .Params.cover.alt | default (printf "%s screenshot" .Title) -}}
 {{- $summary := .Params.summary | default .Summary | plainify | htmlUnescape -}}
+{{- $statusLabel := .Params.badge -}}
+{{- if not $statusLabel -}}
+  {{- if .Params.is_new -}}
+    {{- $statusLabel = "New" -}}
+  {{- else if .Params.featured -}}
+    {{- $statusLabel = "Featured" -}}
+  {{- end -}}
+{{- end -}}
 
 <article class="game-card">
-  <a href="{{ .RelPermalink }}" aria-label="View {{ .Title }}">
+  <a class="card-thumb-link" href="{{ .RelPermalink }}" aria-label="View {{ .Title }}">
     <img src="{{ $img }}" alt="{{ $alt }}" width="600" height="400" loading="lazy">
+    {{- with $statusLabel }}
+      <span class="status-badge">{{ . }}</span>
+    {{- end }}
   </a>
   <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+  {{- with .GetTerms "genres" }}
+    <ul class="card-genres" aria-label="Genres">
+      {{- range . }}
+        <li><a class="tag-badge" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{- end }}
+    </ul>
+  {{- end }}
   <p>{{ $summary }}</p>
   <div class="card-actions">
     {{- if .Params.playable }}
-      <a class="btn" href="{{ $playURL }}">Play</a>
+      <a class="btn btn-cta" href="{{ $playURL }}">Play Now</a>
     {{- else }}
-      <span class="btn is-disabled" aria-disabled="true">Play</span>
+      <span class="btn is-disabled" aria-disabled="true">Play Now</span>
     {{- end }}
     <a class="read-more" href="{{ .RelPermalink }}">Read More</a>
   </div>

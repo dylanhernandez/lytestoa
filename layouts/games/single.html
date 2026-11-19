@@ -25,9 +25,9 @@
 
     <div class="game-actions">
       {{- if .Params.playable }}
-        <a class="btn" href="{{ $playURL }}">Play</a>
+        <a class="btn btn-cta" href="{{ $playURL }}">Play Now</a>
       {{- else }}
-        <span class="btn is-disabled" aria-disabled="true">Play</span>
+        <span class="btn is-disabled" aria-disabled="true">Play Now</span>
       {{- end }}
       {{- with .Params.repo_url }}
         <a class="btn" href="{{ . }}" rel="noopener noreferrer">Source Code</a>
@@ -77,7 +77,7 @@
     </div>
 
     {{- with .Params.controls }}
-      <section aria-labelledby="{{ $slug }}-howto">
+      <section class="game-panel" aria-labelledby="{{ $slug }}-howto">
         <h2 id="{{ $slug }}-howto">How to play</h2>
         <ul>
           {{- range . }}
@@ -102,6 +102,18 @@
                 <figcaption>{{ . }}</figcaption>
               {{- end }}
             </figure>
+          {{- end }}
+        </div>
+      </section>
+    {{- end }}
+
+    {{- $related := where (where site.RegularPages "Section" "games") "RelPermalink" "ne" .RelPermalink | first 3 -}}
+    {{- if gt (len $related) 0 }}
+      <section aria-labelledby="{{ $slug }}-related">
+        <h2 class="section-title" id="{{ $slug }}-related">Related Games</h2>
+        <div class="gallery">
+          {{- range $related }}
+            {{- partial "game-card.html" . -}}
           {{- end }}
         </div>
       </section>
