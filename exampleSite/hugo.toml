@@ -1,5 +1,5 @@
 baseURL = "https://example.com/"
-locale = "en-US"
+languageCode = "en-US"
 title = "Lorum Ipsum"
 theme = "lytestoa"
 
@@ -7,7 +7,9 @@ theme = "lytestoa"
   subtitle = "Lorum Ipsum Games"
   description = "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
   tagline = "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  use_logo = true
   logo = "logo.webp"
+  logo_text = ""
   og_image = "https://placehold.co/600x400"
   github_url = "https://github.com/"
   footer_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
