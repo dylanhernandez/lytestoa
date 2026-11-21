@@ -370,13 +370,27 @@ hr {
 .site-logo {
   display: inline-flex;
   align-items: center;
-  line-height: 0;
+  gap: 10px;
+  color: var(--text-starlight);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   text-decoration: none;
+}
+
+.site-logo:hover {
+  color: var(--brand-cyan);
 }
 
 .site-logo img {
   height: 30px;
   width: auto;
+  flex-shrink: 0;
+}
+
+.site-logo-text {
+  line-height: 1.2;
 }
 
 .nav-links {

@@ -1,5 +1,10 @@
 # LyteStoa Theme Default Configuration
 
+[params]
+  use_logo = false
+  logo = "logo.webp"
+  logo_text = ""
+
 [taxonomies]
   genre = "genres"
   tag = "tags"

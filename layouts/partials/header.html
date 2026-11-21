@@ -1,7 +1,22 @@
 <header class="site-header">
   <nav class="site-nav" aria-label="Primary">
-    <a class="site-logo" href="{{ "" | relURL }}" aria-label="{{ site.Title }} home">
-      <img src="{{ (strings.TrimPrefix "/" (site.Params.logo | default "logo.webp")) | relURL }}" alt="{{ site.Title }} logo">
+    {{- $useLogo := or site.Params.use_logo site.Params.use_logo_image false -}}
+    {{- $logoText := site.Params.logo_text | default "" -}}
+    {{- if and (not $useLogo) (not $logoText) -}}
+      {{- $logoText = site.Title -}}
+    {{- end -}}
+    {{- $brandLabel := $logoText | default site.Title -}}
+    <a class="site-logo" href="{{ "" | relURL }}" aria-label="{{ $brandLabel }} home">
+      {{- if $useLogo }}
+        {{- $logoSrc := site.Params.logo | default "logo.webp" -}}
+        {{- if not (or (hasPrefix $logoSrc "http://") (hasPrefix $logoSrc "https://")) -}}
+          {{- $logoSrc = (strings.TrimPrefix "/" $logoSrc) | relURL -}}
+        {{- end }}
+        <img src="{{ $logoSrc }}" alt="{{ $brandLabel }} logo">
+      {{- end }}
+      {{- with $logoText }}
+        <span class="site-logo-text">{{ . }}</span>
+      {{- end }}
     </a>
     <ul class="nav-links">
       {{- if site.Menus.main -}}
