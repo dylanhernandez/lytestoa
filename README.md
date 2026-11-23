@@ -27,14 +27,14 @@ lytestoa/
 │   └── partials/      # Header, footer, head/meta, game-card, and JSON-LD
 ├── static/            # Default favicons, webmanifest, and logo assets
 ├── hugo.toml          # Default module mounts, taxonomies, and /play build rules
-└── theme.toml         # Theme metadata (requires Hugo >= 0.128.0)
+└── theme.toml         # Theme metadata (requires Hugo >= 0.158.0)
 ```
 
 ## Getting Started
 
 ### Requirements
 
-- [Hugo](https://gohugo.io/) **v0.128.0** or later
+- [Hugo](https://gohugo.io/) **v0.158.0** or later
 
 ### Installation
 
