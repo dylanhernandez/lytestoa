@@ -668,7 +668,6 @@ hr {
 
 .game-page figure img {
   aspect-ratio: 16 / 9;
-  object-fit: cover;
 }
 
 .game-actions {
