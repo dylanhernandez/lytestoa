@@ -1,16 +1,16 @@
 ---
-title: "Game-7"
-slug: "game-7"
+title: "Game-3"
+slug: "game-3"
 date: 2026-11-13T10:00:00-05:00
 draft: false
-weight: 7
-description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Game-7 is an open source HTML5 game on LyteCade."
-summary: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores."
+weight: 4
+description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Game-3 is an open source HTML5 game on LyteCade."
+summary: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 playable: false
 cover:
   image: "https://placehold.co/600x400"
-  alt: "Game-7 screenshot"
-  caption: "Game-7"
+  alt: "Game-3 screenshot"
+  caption: "Game-3"
 genres: ["Placeholder"]
 tags: ["html5", "open-source"]
 developer: "LyteCade"
