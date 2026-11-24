@@ -3,7 +3,7 @@ title: "Game-1"
 slug: "game-1"
 date: 2026-11-13T10:00:00-05:00
 draft: false
-weight: 1
+weight: 2
 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Game-1 is an open source HTML5 game on LyteCade."
 summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 playable: false

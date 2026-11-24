@@ -3,7 +3,7 @@ title: "Game-2"
 slug: "game-2"
 date: 2026-11-13T10:00:00-05:00
 draft: false
-weight: 2
+weight: 3
 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Game-2 is an open source HTML5 game on LyteCade."
 summary: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 playable: false

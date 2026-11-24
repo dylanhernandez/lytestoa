@@ -3,7 +3,7 @@ title: "Rubix"
 slug: "rubix"
 date: 2026-11-13T10:00:00-05:00
 draft: false
-weight: 3
+weight: 1
 description: "Rubix is an arcade-style Rubik's cube solver with a cyberpunk theme. Play this open source HTML5 game on LyteCade."
 summary: "An arcade-style Rubik's cube solver with a cyberpunk theme. Rotate slices to solve all six faces and chase your best time — records persist in your browser."
 
